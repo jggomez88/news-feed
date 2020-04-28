@@ -58,6 +58,7 @@ const updateArticleMenu = (data) => {
     const url = data.articles[i].url;
     const image = data.articles[i].urlToImage;
     const content = data.articles[i].content;
+    const views = (Math.random(100) * 10000).toFixed(0);
 
     const articleHTML = `
     <section class="featuredImage">
@@ -68,7 +69,7 @@ const updateArticleMenu = (data) => {
       <h6>${source}</h6>
     </section>
     <section class="impressions">
-      526
+      ${views}
     </section>
     <div class="clearfix"></div>
     `
