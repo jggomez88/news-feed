@@ -2,13 +2,9 @@
   Please add all Javascript code to this file.
 */
 
-// import {newsAPIKey} from './keys';
-
-// console.log(newsAPIKey);
-
 var url = 'http://newsapi.org/v2/top-headlines?' +
   'country=us&' +
-  'apiKey=a2a6c013d07142f1a1a9ff2268829094';
+  'apiKey=' + newsAPIKey;
 
 var req = new Request(url);
 fetch(req)
@@ -19,7 +15,7 @@ fetch(req)
 
   updateSourcesList(data);
   updateArticleMenu(data);
-  
+  addClickEvents(data);
 
 });
 
@@ -40,32 +36,36 @@ const updateSourcesList = (data) => {
     $('.source-list').append(`<li><a href="#">${uniqueSources[i]}</a></li>`);
   }
 
+  $('.source-list li a').click((e) => {
+    let clickedSource = e.currentTarget.innerHTML
+    if (sources.includes(clickedSource)) {
+      console.log('true');
+    }
+
+  });
+
 
   console.log(sources);
   console.log(uniqueSources);
 
 }
 
-// Updates article menu
-
-
+// Updates article menu with titles, url, etc
 const updateArticleMenu = (data) => {
 
   for (let i=0;i<data.articles.length;i++) {
     const title = data.articles[i].title;
     const formatTitle = title.split(' - ')[0];
     const source = data.articles[i].source.name;
-    const url = data.articles[i].url;
     const image = data.articles[i].urlToImage;
-    const content = data.articles[i].content;
     const views = (Math.random(100) * 10000).toFixed(0);
 
     const articleHTML = `
     <section class="featuredImage">
       <img src=${image} alt="" />
     </section>
-    <section class="articleContent">
-      <a href=${url} target='_blank'><h3>${formatTitle}</h3></a>
+    <section class="articleContent" id=${i} >
+      <a href='#'><h3>${formatTitle}</h3></a>
       <h6>${source}</h6>
     </section>
     <section class="impressions">
@@ -79,10 +79,32 @@ const updateArticleMenu = (data) => {
     let $article = $('.article')[i]
     $article.innerHTML = articleHTML;
 
-    
-
-
   }
+}
+
+
+
+//Attach click event to article class to toggle pop-up
+const addClickEvents = (data) => {
+
+  $('.articleContent').click((e) => {
+    const id = e.currentTarget.id;
+    const title = data.articles[id].title;
+    const formatTitle = title.split(' - ')[0];
+    const description = data.articles[id].description;
+    const url = data.articles[id].url;
+
+    $('div.container h1').text(formatTitle);
+    $('.container p').text(description);
+    $('a.popUpAction').attr(`ahref, ${url}`)
+
+  $('#popUp').removeClass('hidden loader');
+    // .appendTo( $(`#${id}.articleContent`) );
+  });
+
+  $('.closePopUp').click(() => {
+    $('#popUp').addClass('hidden');
+  });
 }
 
 
