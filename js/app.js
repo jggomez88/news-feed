@@ -56,7 +56,7 @@ const updateArticleMenu = (data) => {
     <section class="featuredImage">
       <img src=${image} alt="" />
     </section>
-    <section class="articleContent" id=${key} >
+    <section class="articleContent" >
       <a href='#'><h3>${formatTitle}</h3></a>
       <h6>${source}</h6>
     </section>
@@ -80,7 +80,7 @@ const updateArticleMenu = (data) => {
 const addClickEvents = (data) => {
 
   $('.articleContent').click((e) => {
-    const id = e.currentTarget.id;
+    const id = e.currentTarget.parentNode.attributes.id.value;
     const title = data.articles[id].title;
     const formatTitle = title.split(' - ')[0];
     const description = data.articles[id].description;
